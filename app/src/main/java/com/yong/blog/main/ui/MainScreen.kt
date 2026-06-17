@@ -61,7 +61,7 @@ private fun MainScreenBody(
         PostListButton(
             modifier = Modifier,
             title = "About",
-            onClick = { navigateToDetail("about", "LR") },
+            onClick = { navigateToDetail("about", "Useful") },
         )
     }
 }
