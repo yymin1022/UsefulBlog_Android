@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiServiceFactory {
-    private const val BLOG_API_URL = "https://api.dev-lr.com/"
+    private const val BLOG_API_URL = "https://dev-lr.com/"
 
     fun createApiService(
         interceptors: List<Interceptor> = emptyList()
