@@ -12,11 +12,30 @@ object FirebaseUtil {
         firebaseAnalytics = Firebase.analytics
     }
 
+    fun logMainEvent() {
+        firebaseAnalytics.logEvent("page_view") {
+            param("page_path", "/")
+            param("page_location", "app://blog/")
+            param("page_title", "Main")
+            param("source", "android")
+        }
+    }
+
     fun logEvent(postType: String, postID: String? = null) {
         if(postID == null) {
             logListEvent(postType)
         } else {
             logDetailEvent(postType, postID)
+        }
+
+        val pagePath = if (postID == null) "/$postType" else "/$postType/$postID"
+        val pageTitle = if (postID == null) "Post List - $postType" else "Post Detail - $postID"
+
+        firebaseAnalytics.logEvent("page_view") {
+            param("page_path", pagePath)
+            param("page_location", "app://blog$pagePath")
+            param("page_title", pageTitle)
+            param("source", "android")
         }
     }
 
