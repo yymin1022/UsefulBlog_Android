@@ -102,29 +102,34 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(postImageMap = it.postImageMap + (srcID to null)) }
 
-            val postImage = repository.getPostImage(postType, postID, srcID)
-            if(postImage == null) {
-                Log.e(LOG_TAG, "PostImage [$postID] got error")
-                return@launch
-            }
-
-            val postImageBitmap = postImage.base64Str.let { base64Str ->
-                try {
-                    val imageBytes = Base64.decode(base64Str)
-
-                    val bitmapOptions = BitmapFactory.Options()
-                    bitmapOptions.inJustDecodeBounds = true
-                    BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size, bitmapOptions)
-                    bitmapOptions.inSampleSize = downscaleBitmap(bitmapOptions)
-                    bitmapOptions.inJustDecodeBounds = false
-                    BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size, bitmapOptions)
-                } catch (e: IllegalArgumentException) {
-                    e.printStackTrace()
-                    null
+            try {
+                val postImage = repository.getPostImage(postType, postID, srcID)
+                if(postImage == null) {
+                    Log.e(LOG_TAG, "PostImage [$postID] got error")
+                    return@launch
                 }
-            }
 
-            _uiState.update { it.copy(postImageMap = it.postImageMap + (srcID to postImageBitmap)) }
+                val postImageBitmap = postImage.base64Str.let { base64Str ->
+                    try {
+                        val imageBytes = Base64.decode(base64Str)
+
+                        val bitmapOptions = BitmapFactory.Options()
+                        bitmapOptions.inJustDecodeBounds = true
+                        BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size, bitmapOptions)
+                        bitmapOptions.inSampleSize = downscaleBitmap(bitmapOptions)
+                        bitmapOptions.inJustDecodeBounds = false
+                        BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size, bitmapOptions)
+                    } catch (e: IllegalArgumentException) {
+                        e.printStackTrace()
+                        null
+                    }
+                }
+
+                _uiState.update { it.copy(postImageMap = it.postImageMap + (srcID to postImageBitmap)) }
+            } catch(e: Exception) {
+                e.printStackTrace()
+                Log.e(LOG_TAG, "PostImage [$postID] request failed: ${e.message}")
+            }
         }
     }
 
