@@ -46,11 +46,6 @@ android {
     buildFeatures {
         compose = true
     }
-    configurations {
-        all {
-            exclude(group = "org.jetbrains", module = "annotations-java5")
-        }
-    }
 }
 
 kotlin {
@@ -99,7 +94,11 @@ dependencies {
     implementation(libs.markwon.html)
     implementation(libs.markwon.image)
     implementation(libs.markwon.linkify)
-    implementation(libs.markwon.syntax.highlight)
+    implementation(libs.markwon.syntax.highlight) {
+        // prism4j 2.0.0이 끌어오는 구형 annotations-java5가
+        // 현대 org.jetbrains:annotations와 중복 클래스를 일으켜 제외
+        exclude(group = "org.jetbrains", module = "annotations-java5")
+    }
     implementation(libs.prism4j.languages)
 
     // Okhttp dependency
