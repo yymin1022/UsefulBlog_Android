@@ -5,6 +5,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object ApiServiceFactory {
     private const val BLOG_API_URL = "https://dev-lr.com/"
@@ -13,6 +14,9 @@ object ApiServiceFactory {
         interceptors: List<Interceptor> = emptyList()
     ): ApiService {
         val client = OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .apply {
                 interceptors.forEach { addInterceptor(it) }
             }
