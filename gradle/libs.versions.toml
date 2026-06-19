@@ -1,7 +1,7 @@
 [versions]
 activityCompose = "1.13.0"
 agp = "9.2.1"
-coilCompose = "3.3.0"
+coilCompose = "3.5.0"
 composeBom = "2026.06.00"
 converterGson = "3.0.0"
 coreKtx = "1.19.0"
@@ -18,7 +18,7 @@ ksp = "2.3.9"
 lifecycleRuntimeKtx = "2.11.0"
 markwon = "4.6.2"
 navigationCompose = "2.9.8"
-okhttp = "5.1.0"
+okhttp = "5.4.0"
 prism4jLanguages = "1.0.0"
 retrofit = "3.0.0"
 
