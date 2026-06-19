@@ -78,24 +78,29 @@ class ListViewModel @Inject constructor(
 
     private fun requestPostThumbnail(postType: String, postID: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val thumbnailImage = repository.getPostThumbnail(postType, postID)
-            if(thumbnailImage == null) {
-                Log.e(LOG_TAG, "Thumbnail [$postID] got error")
-                return@launch
-            }
-
-            val thumbnailBitmap = thumbnailImage.base64Str.let { base64Str ->
-                try {
-                    val imageBytes = Base64.decode(base64Str)
-                    val bitmapOptions = BitmapFactory.Options().apply { inSampleSize = 2 }
-                    BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size, bitmapOptions)
-                } catch (e: IllegalArgumentException) {
-                    e.printStackTrace()
-                    null
+            try {
+                val thumbnailImage = repository.getPostThumbnail(postType, postID)
+                if(thumbnailImage == null) {
+                    Log.e(LOG_TAG, "Thumbnail [$postID] got error")
+                    return@launch
                 }
-            }
 
-            _uiState.update { it.copy(postThumbnailMap = it.postThumbnailMap + (postID to thumbnailBitmap)) }
+                val thumbnailBitmap = thumbnailImage.base64Str.let { base64Str ->
+                    try {
+                        val imageBytes = Base64.decode(base64Str)
+                        val bitmapOptions = BitmapFactory.Options().apply { inSampleSize = 2 }
+                        BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size, bitmapOptions)
+                    } catch (e: IllegalArgumentException) {
+                        e.printStackTrace()
+                        null
+                    }
+                }
+
+                _uiState.update { it.copy(postThumbnailMap = it.postThumbnailMap + (postID to thumbnailBitmap)) }
+            } catch(e: Exception) {
+                e.printStackTrace()
+                Log.e(LOG_TAG, "Thumbnail [$postID] request failed: ${e.message}")
+            }
         }
     }
 }
