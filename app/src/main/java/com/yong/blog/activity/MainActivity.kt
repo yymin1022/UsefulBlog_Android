@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.yong.blog.navigation.BlogNavHost
-import com.yong.blog.common.ui.theme.Blog_LRTheme
+import com.yong.blog.common.ui.theme.UsefulBlogTheme
 import com.yong.blog.common.util.FirebaseUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,7 +19,7 @@ class MainActivity: ComponentActivity() {
         setContent {
             val blogNavController = rememberNavController()
 
-            Blog_LRTheme {
+            UsefulBlogTheme {
                 BlogNavHost(
                     modifier = Modifier,
                     navController = blogNavController

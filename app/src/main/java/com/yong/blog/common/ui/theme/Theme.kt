@@ -27,7 +27,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun Blog_LRTheme(
+fun UsefulBlogTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
