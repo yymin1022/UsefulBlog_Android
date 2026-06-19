@@ -56,17 +56,22 @@ private fun MainScreenBody(
         )
         PostListButton(
             modifier = Modifier,
-            title = "Blog",
+            title = stringResource(R.string.post_type_blog),
             onClick = { navigateToList("blog") },
         )
         PostListButton(
             modifier = Modifier,
-            title = "Project",
+            title = stringResource(R.string.post_type_project),
             onClick = { navigateToList("project") },
         )
         PostListButton(
             modifier = Modifier,
-            title = "About",
+            title = stringResource(R.string.post_type_solving),
+            onClick = { navigateToList("solving") },
+        )
+        PostListButton(
+            modifier = Modifier,
+            title = stringResource(R.string.post_type_about),
             onClick = { navigateToDetail("about", "Useful") },
         )
     }
