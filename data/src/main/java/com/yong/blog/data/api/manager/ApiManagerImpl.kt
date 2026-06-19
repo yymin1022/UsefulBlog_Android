@@ -14,15 +14,20 @@ class ApiManagerImpl(private val api: ApiService): ApiManager {
         postType: String,
         postID: String
     ): PostData? {
-        val requestDto = PostDataRequest(postID, postType)
-        val responseDto = api.getPostData(requestDto)
+        return try {
+            val requestDto = PostDataRequest(postID, postType)
+            val responseDto = api.getPostData(requestDto)
 
-        if(responseDto.resultCode != 200
-            || responseDto.resultData == null) {
-            return null
+            if(responseDto.resultCode != 200
+                || responseDto.resultData == null) {
+                null
+            } else {
+                responseDto.resultData.toDomain(postID)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
-
-        return responseDto.resultData.toDomain(postID)
     }
 
     override suspend fun getPostImage(
@@ -30,26 +35,36 @@ class ApiManagerImpl(private val api: ApiService): ApiManager {
         postID: String,
         srcID: String
     ): PostImage? {
-        val requestDto = PostImageRequest(postID, postType, srcID)
-        val responseDto = api.getPostImage(requestDto)
+        return try {
+            val requestDto = PostImageRequest(postID, postType, srcID)
+            val responseDto = api.getPostImage(requestDto)
 
-        if(responseDto.resultCode != 200
-            || responseDto.resultData == null) {
-            return null
+            if(responseDto.resultCode != 200
+                || responseDto.resultData == null) {
+                null
+            } else {
+                responseDto.resultData.toDomain()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
-
-        return responseDto.resultData.toDomain()
     }
 
     override suspend fun getPostList(postType: String): PostList? {
-        val requestDto = PostListRequest(postType)
-        val responseDto = api.getPostList(requestDto)
+        return try {
+            val requestDto = PostListRequest(postType)
+            val responseDto = api.getPostList(requestDto)
 
-        if(responseDto.resultCode != 200
-            || responseDto.resultData == null) {
-            return null
+            if(responseDto.resultCode != 200
+                || responseDto.resultData == null) {
+                null
+            } else {
+                responseDto.resultData.toDomain()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
-
-        return responseDto.resultData.toDomain()
     }
 }
