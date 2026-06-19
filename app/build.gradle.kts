@@ -22,8 +22,8 @@ android {
         applicationId = "com.yong.blog"
         minSdk = 24
         targetSdk = 37
-        versionCode = 20003
-        versionName = "2.0.3"
+        versionCode = 20100
+        versionName = "2.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
