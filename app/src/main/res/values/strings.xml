@@ -11,6 +11,7 @@
     <string name="main_title_2">Useful, the Developer</string>
     <string name="main_title_3"/>
 
+    <string name="post_type_about" translatable="false">About</string>
     <string name="post_type_blog" translatable="false">Blog</string>
     <string name="post_type_project" translatable="false">Project</string>
     <string name="post_type_solving" translatable="false">Solving</string>
