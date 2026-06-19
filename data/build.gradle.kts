@@ -12,7 +12,12 @@ kotlin {
     }
 }
 dependencies {
+    // Project dependency
     implementation(project(":domain"))
-    implementation(libs.retrofit)
+
+    // Gson dependency
     implementation(libs.converter.gson)
+
+    // Retrofit dependency
+    implementation(libs.retrofit)
 }
