@@ -5,13 +5,13 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-    id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
 
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
