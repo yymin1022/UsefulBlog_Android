@@ -18,19 +18,25 @@ import androidx.compose.ui.unit.sp
 import com.yong.blog.R
 import com.yong.blog.common.util.FirebaseUtil
 
+/**
+ * Main UI of Useful Blog
+ */
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     navigateToList: (String) -> Unit,
     navigateToDetail: (String, String) -> Unit,
 ) {
+    // Effect for analytics
     LaunchedEffect(Unit) {
         FirebaseUtil.logMainEvent()
     }
 
+    // Scaffold UI
     Scaffold(
         modifier = modifier,
     ) { innerPadding ->
+        // Main UI
         MainScreenBody(
             modifier = Modifier
                 .fillMaxSize()
@@ -51,27 +57,41 @@ private fun MainScreenBody(
         modifier = modifier
             .padding(horizontal = 20.dp, vertical = 40.dp),
     ) {
+        // Main Title
         MainTitle(
             modifier = Modifier,
         )
+
+        // Post button - blog
         PostListButton(
             modifier = Modifier,
-            title = "Blog",
+            title = stringResource(R.string.post_type_blog),
             onClick = { navigateToList("blog") },
         )
+        // Post button - project
         PostListButton(
             modifier = Modifier,
-            title = "Project",
+            title = stringResource(R.string.post_type_project),
             onClick = { navigateToList("project") },
         )
+        // Post button - solving
         PostListButton(
             modifier = Modifier,
-            title = "About",
+            title = stringResource(R.string.post_type_solving),
+            onClick = { navigateToList("solving") },
+        )
+        // Post button - about
+        PostListButton(
+            modifier = Modifier,
+            title = stringResource(R.string.post_type_about),
             onClick = { navigateToDetail("about", "Useful") },
         )
     }
 }
 
+/**
+ * Main Title
+ */
 @Composable
 private fun MainTitle(
     modifier: Modifier = Modifier,
@@ -93,12 +113,16 @@ private fun MainTitle(
     }
 }
 
+/**
+ * Main Title Text
+ */
 @Composable
 private fun MainTitleText(
     title: String,
     titleColor: Color? = null,
 ) {
-    val textColor = titleColor ?: MaterialTheme.colorScheme.onBackground
+    val textColor = titleColor
+        ?: MaterialTheme.colorScheme.onBackground
 
     Text(
         text = title,
@@ -107,6 +131,9 @@ private fun MainTitleText(
     )
 }
 
+/**
+ * Post List Button
+ */
 @Composable
 private fun PostListButton(
     modifier: Modifier = Modifier,

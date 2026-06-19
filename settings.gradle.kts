@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Blog_LR"
+rootProject.name = "UsefulBlog"
 include(":app")
 include(":domain")
 include(":data")

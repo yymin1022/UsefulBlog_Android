@@ -32,7 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.yong.blog.R
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
@@ -42,14 +42,18 @@ import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.model.PostListItem
 import com.yong.blog.list.viewmodel.ListViewModel
 
+/**
+ * List UI of Useful Blog
+ */
 @Composable
 fun ListScreen(
     modifier: Modifier = Modifier,
+    viewModel: ListViewModel = hiltViewModel(),
     postType: String,
-    navigateToDetail: (String, String) -> Unit,
+    navigateToDetail: (postType: String, postID: String) -> Unit,
     navigateToMain: () -> Unit,
-    viewModel: ListViewModel = hiltViewModel()
 ) {
+    // UI State
     val uiState by viewModel.uiState.collectAsState()
     val uiStatus = uiState.uiStatus
 
@@ -57,62 +61,69 @@ fun ListScreen(
     val postList = uiState.postList
     val thumbnailMap = uiState.postThumbnailMap
 
-    val listScrollState = rememberSaveable(
-        saver = LazyListState.Saver
-    ) {
-        LazyListState()
-    }
-
+    // Effect for load data
     LaunchedEffect(postType) {
         viewModel.getAppBarTitle(postType)
         viewModel.getPostList(postType)
     }
 
+    // Effect for analytics
     LaunchedEffect(Unit) {
         viewModel.logListEvent(postType)
     }
 
+    // Scaffold UI
     Scaffold(
         modifier = modifier,
         topBar = {
+            // App Bar title text
+            val appBarTitleText = stringResource(
+                R.string.list_appbar_title,
+                appBarTitle?.let { stringResource(it) } ?: ""
+            )
+
+            // App Bar
             BlogAppBar(
                 modifier = Modifier,
-                titleText = String.format(stringResource(R.string.list_appbar_title), appBarTitle?.let { stringResource(it) } ?: ""),
+                titleText = appBarTitleText,
                 navigationIcon = {
+                    // Go back
                     IconButton(
                         onClick = navigateToMain
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.desc_back)
+                            contentDescription = stringResource(R.string.desc_back),
                         )
                     }
-                }
+                },
             )
-        }
+        },
     ) { innerPadding ->
+        // Post List UI
         ListScreenBody(
+            uiStatus = uiStatus,
             modifier = Modifier
                 .padding(innerPadding),
             postType = postType,
             postList = postList,
-            listScrollState = listScrollState,
             thumbnailMap = thumbnailMap,
-            uiStatus = uiStatus,
             requestPostList = { viewModel.getPostList(postType) },
-            navigateToDetail = navigateToDetail
+            navigateToDetail = navigateToDetail,
         )
     }
 }
 
+/**
+ * Post List UI
+ */
 @Composable
 private fun ListScreenBody(
     modifier: Modifier = Modifier,
+    uiStatus: BlogUiStatus,
     postType: String,
     postList: PostList?,
-    listScrollState: LazyListState,
     thumbnailMap: Map<String, Bitmap?>,
-    uiStatus: BlogUiStatus,
     requestPostList: () -> Unit,
     navigateToDetail: (String, String) -> Unit
 ) {
@@ -140,7 +151,6 @@ private fun ListScreenBody(
                     modifier = Modifier,
                     postType = postType,
                     postList = postList,
-                    listScrollState = listScrollState,
                     thumbnailMap = thumbnailMap,
                     navigateToDetail = navigateToDetail
                 )
@@ -154,42 +164,54 @@ private fun PostList(
     modifier: Modifier = Modifier,
     postType: String,
     postList: PostList?,
-    listScrollState: LazyListState,
     thumbnailMap: Map<String, Bitmap?>,
     navigateToDetail: (String, String) -> Unit
 ) {
-    if(postList != null) {
-        LazyColumn(
-            modifier = modifier,
-            state = listScrollState,
-        ) {
-            items(
-                count = postList.postCount,
-                key = { idx -> postList.postList[idx].postID }
-            ) { idx ->
-                val post = postList.postList[idx]
-                val postURL = post.postURL
-                val postThumbnail = thumbnailMap[postURL]
-
-                PostListItem(
-                    modifier = Modifier,
-                    postType = postType,
-                    postData = post,
-                    postThumbnail = postThumbnail,
-                    onClick = navigateToDetail,
-                )
-            }
-        }
-    } else {
+    // Show text if post list is null
+    if(postList == null) {
         Box(
             modifier = modifier,
             contentAlignment = Alignment.Center
         ) {
             Text("Nothing")
         }
+        return
+    }
+
+    // State for list scroll
+    val listScrollState = rememberSaveable(
+        saver = LazyListState.Saver
+    ) {
+        LazyListState()
+    }
+
+    // Show each post list item
+    LazyColumn(
+        modifier = modifier,
+        state = listScrollState,
+    ) {
+        items(
+            count = postList.postCount,
+            key = { idx -> postList.postList[idx].postID }
+        ) { idx ->
+            val post = postList.postList[idx]
+            val postURL = post.postURL
+            val postThumbnail = thumbnailMap[postURL]
+
+            PostListItem(
+                modifier = Modifier,
+                postType = postType,
+                postData = post,
+                postThumbnail = postThumbnail,
+                onClick = navigateToDetail,
+            )
+        }
     }
 }
 
+/**
+ * Post List Item
+ */
 @Composable
 private fun PostListItem(
     modifier: Modifier = Modifier,
@@ -209,10 +231,13 @@ private fun PostListItem(
             .background(MaterialTheme.colorScheme.surface)
             .clickable(onClick = { onClick(postType, postID) })
     ) {
+        // Thumbnail image
         PostListItemImage(
             modifier = Modifier,
             postThumbnail = postThumbnail
         )
+
+        // Text
         PostListItemText(
             modifier = Modifier,
             postDate = postDate,
@@ -222,6 +247,9 @@ private fun PostListItem(
     }
 }
 
+/**
+ * Post List Item - Thumbnail image
+ */
 @Composable
 private fun PostListItemImage(
     modifier: Modifier = Modifier,
@@ -233,20 +261,25 @@ private fun PostListItemImage(
             .aspectRatio(1f),
         contentAlignment = Alignment.Center
     ) {
-        if(postThumbnail != null) {
-            Image(
-                modifier = Modifier
-                    .fillMaxSize(),
-                bitmap = postThumbnail.asImageBitmap(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-        } else {
+        // Show loading indicator if thumbnail is null
+        if(postThumbnail == null) {
             BlogLoadingIndicator(modifier = Modifier)
+            return
         }
+
+        Image(
+            modifier = Modifier
+                .fillMaxSize(),
+            bitmap = postThumbnail.asImageBitmap(),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
     }
 }
 
+/**
+ * Post List Item Text
+ */
 @Composable
 private fun PostListItemText(
     modifier: Modifier = Modifier,
@@ -258,14 +291,19 @@ private fun PostListItemText(
         modifier = modifier
             .fillMaxSize()
     ) {
+        // Title text
         PostListItemTextTitle(
             modifier = Modifier,
             postTitle = postTitle
         )
+
+        // Date text
         PostListItemTextDate(
             modifier = Modifier,
             postDate = postDate
         )
+
+        // Tag text
         PostListItemTextTag(
             modifier = Modifier,
             postTag = postTag
@@ -273,6 +311,9 @@ private fun PostListItemText(
     }
 }
 
+/**
+ * Post List Item Text - Date
+ */
 @Composable
 private fun PostListItemTextDate(
     modifier: Modifier = Modifier,
@@ -287,6 +328,9 @@ private fun PostListItemTextDate(
     )
 }
 
+/**
+ * Post List Item Text - Tag
+ */
 @Composable
 private fun PostListItemTextTag(
     modifier: Modifier = Modifier,
@@ -301,6 +345,9 @@ private fun PostListItemTextTag(
     )
 }
 
+/**
+ * Post List Item Text - Title
+ */
 @Composable
 private fun PostListItemTextTitle(
     modifier: Modifier = Modifier,

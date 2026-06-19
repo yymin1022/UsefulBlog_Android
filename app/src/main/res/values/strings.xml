@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LR\'s IT Blog</string>
+    <string name="app_name">Useful IT Blog</string>
 
     <string name="list_appbar_title">All Posts - %s</string>
     <string name="detail_appbar_title">View Post</string>
@@ -8,9 +8,10 @@
     <string name="common_error_retry">Retry</string>
 
     <string name="main_title_1">Hi, there!</string>
-    <string name="main_title_2">LR, the Developer</string>
+    <string name="main_title_2">Useful, the Developer</string>
     <string name="main_title_3"/>
 
+    <string name="post_type_about" translatable="false">About</string>
     <string name="post_type_blog" translatable="false">Blog</string>
     <string name="post_type_project" translatable="false">Project</string>
     <string name="post_type_solving" translatable="false">Solving</string>

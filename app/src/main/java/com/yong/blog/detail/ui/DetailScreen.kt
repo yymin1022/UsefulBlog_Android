@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.yong.blog.R
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
@@ -42,12 +42,13 @@ import com.yong.blog.domain.model.PostData
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
+    viewModel: DetailViewModel = hiltViewModel(),
     postType: String,
     postID: String,
     navigateToList: () -> Unit,
     navigateToMain: () -> Unit,
-    viewModel: DetailViewModel = hiltViewModel(),
 ) {
+    // UI State
     val uiState by viewModel.uiState.collectAsState()
     val uiStatus = uiState.uiStatus
 
@@ -56,21 +57,26 @@ fun DetailScreen(
     val postImageMap = uiState.postImageMap
     val postMarkdownContent = uiState.postMarkdownContent
 
+    // Effect for load data
     LaunchedEffect(postType, postID) {
         viewModel.getPostData(postType, postID)
     }
 
+    // Effect for analytics
     LaunchedEffect(Unit) {
         viewModel.logDetailEvent(postType, postID)
     }
 
+    // Scaffold UI
     Scaffold(
         modifier = modifier,
         topBar = {
+            // App Bar
             BlogAppBar(
                 modifier = Modifier,
                 titleText = stringResource(appBarTitle),
                 navigationIcon = {
+                    // Go back
                     IconButton(
                         onClick = navigateToList
                     ) {
@@ -81,6 +87,7 @@ fun DetailScreen(
                     }
                 },
                 actionIcon = {
+                    // Go home
                     IconButton(
                         onClick = navigateToMain
                     ) {
@@ -93,13 +100,14 @@ fun DetailScreen(
             )
         }
     ) { innerPadding ->
+        // Post Dez UI
         DetailScreenBody(
             modifier = Modifier
                 .padding(innerPadding),
+            uiStatus = uiStatus,
             postData = postData,
             postImageMap = postImageMap,
             postMarkdownContent = postMarkdownContent,
-            uiStatus = uiStatus,
             requestPostData = { viewModel.getPostData(postType, postID) },
         )
     }
@@ -108,14 +116,12 @@ fun DetailScreen(
 @Composable
 private fun DetailScreenBody(
     modifier: Modifier = Modifier,
+    uiStatus: BlogUiStatus,
     postData: PostData?,
     postImageMap: Map<String, Bitmap?>,
     postMarkdownContent: List<MarkdownElement>,
-    uiStatus: BlogUiStatus,
     requestPostData: () -> Unit,
 ) {
-    val scrollState = rememberScrollState()
-
     Box(
         modifier = modifier,
     ) {
@@ -141,30 +147,41 @@ private fun DetailScreenBody(
                     val postTag = data.postTag
                     val postTitle = data.postTitle
 
+                    // State for scroll
+                    val scrollState = rememberScrollState()
                     Column(
                         modifier = Modifier
                             .verticalScroll(scrollState)
                             .padding(horizontal = 16.dp, vertical = 16.dp),
                     ) {
+                        // Title text
                         PostTitle(
                             modifier = Modifier,
                             title = postTitle,
                         )
+
+                        // Date text
                         PostDate(
                             modifier = Modifier,
                             date = postDate,
                         )
+
                         PostContentDivider(
                             modifier = Modifier,
                         )
+
+                        // Content area
                         PostContent(
                             modifier = Modifier,
                             markdownContent = postMarkdownContent,
                             postImageMap = postImageMap,
                         )
+
                         PostContentDivider(
                             modifier = Modifier,
                         )
+
+                        // Tag text
                         PostTag(
                             modifier = Modifier,
                             tagList = postTag,
@@ -176,6 +193,9 @@ private fun DetailScreenBody(
     }
 }
 
+/**
+ * Post Detail - Content area
+ */
 @Composable
 private fun PostContent(
     modifier: Modifier = Modifier,
@@ -206,6 +226,9 @@ private fun PostContentDivider(
     )
 }
 
+/**
+ * Post Detail - Date text
+ */
 @Composable
 private fun PostDate(
     modifier: Modifier = Modifier,
@@ -224,6 +247,9 @@ private fun PostDate(
     }
 }
 
+/**
+ * Post Detail - Tag text
+ */
 @Composable
 private fun PostTag(
     modifier: Modifier = Modifier,
@@ -246,6 +272,9 @@ private fun PostTag(
     }
 }
 
+/**
+ * Post Detail - Title text
+ */
 @Composable
 private fun PostTitle(
     modifier: Modifier = Modifier,

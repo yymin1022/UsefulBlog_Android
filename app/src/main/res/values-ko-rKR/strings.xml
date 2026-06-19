@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LR의 IT블로그</string>
+    <string name="app_name">Useful한 IT블로그</string>
     <string name="list_appbar_title">전체 포스팅 - %s</string>
     <string name="detail_appbar_title">포스팅 읽기</string>
     <string name="common_error_message">오류가 발생했어요</string>
     <string name="common_error_retry">새로고침</string>
     <string name="main_title_1">안녕하세요</string>
     <string name="main_title_2">1인개발자</string>
-    <string name="main_title_3">LR입니다</string>
+    <string name="main_title_3">Useful입니다</string>
 </resources>
