@@ -16,3 +16,7 @@ local.properties
 .idea/
 .kotlin/
 **/google-services.json
+
+.idea/*
+**/*.aab
+**/*.apk
