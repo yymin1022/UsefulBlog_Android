@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     // Android / Kotlin plugin
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
 
@@ -80,6 +79,9 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    // Kotlin dependency
+    ksp(libs.kotlin.metadata.jvm)
 
     // Firebase / GMS dependency
     implementation(libs.firebase.analytics)

@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.10.1"
-agp = "8.11.0"
+agp = "9.2.1"
 coilCompose = "3.3.0"
 composeBom = "2025.06.01"
 converterGson = "3.0.0"
@@ -9,13 +9,12 @@ espressoCore = "3.6.1"
 firebaseBom = "34.3.0"
 firebaseCrashlytics = "3.0.6"
 googleServices = "4.4.3"
-hiltAndroid = "2.56.2"
+hiltAndroid = "2.59.2"
 hiltNavigationCompose = "1.2.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
-kotlin = "2.2.0"
-kotlinSerialization = "2.2.20"
-ksp = "2.2.0-2.0.2"
+kotlin = "2.4.0"
+ksp = "2.3.9"
 lifecycleRuntimeKtx = "2.9.1"
 markwon = "4.6.2"
 navigationCompose = "2.9.1"
@@ -47,6 +46,7 @@ firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+kotlin-metadata-jvm = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 markwon-core = { module = "io.noties.markwon:core", version.ref = "markwon" }
 markwon-ext-strikethrough = { module = "io.noties.markwon:ext-strikethrough", version.ref = "markwon" }
 markwon-ext-tables = { module = "io.noties.markwon:ext-tables", version.ref = "markwon" }
@@ -64,7 +64,6 @@ firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
